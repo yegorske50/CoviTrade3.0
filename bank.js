@@ -1,7 +1,7 @@
 
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.9.3/firebase-app.js'
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.9.3/firebase-database.js";
+import { getDatabase, ref, set, onValue ,child,push,update} from "https://www.gstatic.com/firebasejs/9.9.3/firebase-database.js";
 
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -22,20 +22,20 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 //variable reader
-// setTimeout(function () {
-//     onValue(
-//         ref(database, "users/"), (snapshot) => {
-//             var p = document.createElement(p);
-//             p.innerHTML = snapshot.val().username;
-//             document.getElementsByTagName('body')[0].appendChild(p);
-//         }
-//     )
-// }, 3000);
+setTimeout(function () {
+    onValue(
+        ref(database, "users/"), (snapshot) => {
+            var p = document.createElement(p);
+            p.innerHTML = snapshot.val().username;
+            document.getElementsByTagName('body')[0].appendChild(p);
+        }
+    )
+}, 3000);
 
 //variable setter
-// set(ref(database, 'CHINA/'),{
-//     population: 100000,
-// })
+set(ref(database, 'CHINA/'),{
+    population: 100000,
+})
 
 function show_info()
 {
@@ -45,13 +45,19 @@ function show_info()
         onValue(
             ref(database,country),(snapshot) => {
                 var h1 = document.createElement(h1);
-                h1.innerHTML += snapshot.val().population;
+                h1.innerHTML += snapshot.val();
                 document.getElementsByTagName('body')[0].appendChild(h1);
             }
         )
 }
 
 //setTimeout(show_info(),2000);
+
+//variable updater
+const updates = {};
+updates['/CHINA/' + 'para'] = 2;
+update(ref(database),updates);
+
 
 function transaction()
 {
@@ -65,38 +71,7 @@ function transaction()
     amt = prompt("amount");
     buyer += "/";
     seller += "/";
-    onValue(
-        ref(database,buyer),(snapshot) => {
-            var temp = snapshot.val().resource;
-        }
-    )
-    temp += amount; 
-    set(ref(database,buyer),{
-        resource: temp
-    })
-    onValue(
-        ref(database,seller),(snapshot) => {
-            temp = snapshot.val().resource;
-        }
-    )
-    temp -= amount;
-    set(ref(database,seller),{
-        resource: temp
-    })
-    onValue(
-        ref(database,buyer),(snapshot) => {
-            var temp = snapshot.val().resource;
-            console.log(buyer);
-            console.log(temp);
-        }
-    )
-    onValue(
-        ref(database,Seller),(snapshot) => {
-            var temp = snapshot.val().resource;
-            console.log(seller);
-            console.log(temp);
-        }
-    )
+    
 }
 // var initalresources = 10000;
 
